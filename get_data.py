@@ -97,10 +97,17 @@ def get_track_data(base_url, track_id, headers):
         'track_name': d_track['name'],
         'track_length_ms': d_track['duration_ms'],
         'track_number': d_track['track_number'],
+        'track_acousticness': d_features['acousticness'],
         'track_danceability': d_features['danceability'],
         'track_energy': d_features['energy'],
+        'track_instrumentalness': d_features['instrumentalness'],
+        'track_key': d_features['key'],
+        'track_liveness': d_features['liveness'],
         'track_loudness': d_features['loudness'],
+        'track_mode': d_features['mode'],
+        'track_speechiness': d_features['speechiness'],
         'track_tempo': d_features['tempo'],
+        'track_time_signature': d_features['time_signature'],
         'track_valence': d_features['valence']
     }
 
