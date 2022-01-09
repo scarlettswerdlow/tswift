@@ -2,6 +2,11 @@
 
 Project to do data science with Taylor Swift.
 
+## Organization
+
+- `src`: Source code
+- `notebooks`: Jupyter notebooks for exploratory data analysis
+
 ## Data
 
 ### Spotify
