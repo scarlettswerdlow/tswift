@@ -6,6 +6,7 @@ Project to do data science with Taylor Swift.
 
 - `src`: Source code
 - `notebooks`: Jupyter notebooks for exploratory data analysis
+- `reports`: Generated analysis, including graphics
 
 ## Data
 
