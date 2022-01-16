@@ -39,7 +39,7 @@ track_df %>%
   ) +
   geom_dotplot(
     binaxis = 'y',
-    dotsize = .6,
+    dotsize = .8,
     fill = NA,
     stackdir = 'center',
     aes(color = album_name)
@@ -47,15 +47,17 @@ track_df %>%
   geom_dotplot(
     data = track_df[track_df$outlier_track_length,],
     binaxis = 'y',
-    color = 'black',
-    dotsize = .6,
-    fill = 'black',
+    #color = 'black',
+    dotsize = .8,
+    #fill = 'black',
     stackdir = 'center',
+    aes(color = album_name, fill = album_name)
   ) +
   geom_text( 
     data = track_df[track_df$outlier_track_length & track_df$album_name != 'Red',],
     family = 'Andale Mono',
     hjust = 'right',
+    size = 6,
     aes(
       label = paste(
         track_name, 
@@ -68,6 +70,7 @@ track_df %>%
     data = track_df[track_df$outlier_track_length & track_df$album_name == 'Red',],
     family = 'Andale Mono',
     hjust = 'left',
+    size = 6,
     aes(
       label = paste(
         ' ', 
@@ -85,8 +88,17 @@ track_df %>%
   theme_minimal() +
   theme(
     legend.position = 'none',
-    text = element_text(family = 'Andale Mono', size = 14),
+    text = element_text(family = 'Andale Mono', size = 25),
     plot.title = element_text(margin = margin(10, 0, 10, 0)),
     axis.title.x = element_text(margin = margin(10, 0, 10, 0)),
     axis.title.y = element_text(margin = margin(0, 10, 0, 10))
   )
+
+ggsave(
+  'tswift/reports/figures/outliers_track_length.jpeg', 
+  device = 'jpeg',
+  width = 18,
+  height = 12,
+  units = 'in',
+  dpi = 600
+)
