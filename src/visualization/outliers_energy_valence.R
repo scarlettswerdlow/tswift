@@ -160,4 +160,48 @@ ggsave(
   dpi = 600
 )
 
+# Danceability plot
+plt_danceability <- make_outlier_plot(
+  track_df = track_df, 
+  outlier_df = outlier_df, 
+  feature = track_danceability, 
+  feature_name = 'track_danceability'
+)
+
+plt_danceability + 
+  geom_text(
+    data = subset(
+      left_join(outliers_df, track_df, by = 'track_name'), 
+      (variable == 'track_danceability') & 
+        (str_starts(track_name, 'The', TRUE)) & 
+        (str_starts(track_name, 'exile', TRUE))
+    ),
+    aes(label = str_wrap(track_name, width = 12)),
+    family = 'Andale Mono',
+    size = 6,
+    vjust = 'bottom',
+    nudge_y = 0.03
+  ) +
+  geom_text(
+    data = subset(
+      left_join(outliers_df, track_df, by = 'track_name'), 
+      (variable == 'track_danceability') & 
+        (str_starts(track_name, 'The')) | 
+        (str_starts(track_name, 'exile'))
+    ),
+    aes(label = str_wrap(track_name, width = 12)),
+    family = 'Andale Mono',
+    size = 6,
+    vjust = 'top',
+    nudge_y = -0.03
+  )
+
+ggsave(
+  'tswift/reports/figures/outliers_track_danceability_point.jpeg', 
+  device = 'jpeg',
+  width = 18,
+  height = 12,
+  units = 'in',
+  dpi = 600
+)
   
