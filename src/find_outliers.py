@@ -8,15 +8,11 @@ import pandas as pd
 
 to_test = {
     'track_length_ms': 'z_score',
-    'track_acousticness': 'z_score',
-    'track_danceability': 'z_score',
-    'track_energy': 'z_score',
     'track_key': 'prop',
     'track_loudness': 'z_score',
     'track_mode': 'prop',
     'track_tempo': 'z_score',
-    'track_time_signature': 'prop',
-    'track_valence': 'z_score'
+    'track_time_signature': 'prop'
 }
 
 ################################################################################
