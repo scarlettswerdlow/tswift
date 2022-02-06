@@ -1,32 +1,8 @@
-library(tidyverse)
 library(taylor)
-
-# Read in track and outlier data
-
-track_df = read_csv('tswift/data/tracks.csv')
-album_df = read_csv('tswift/data/albums.csv')
-outliers_df = read_csv('tswift/data/outliers.csv')
-
-# Merge track and album data
-
-track_df <- left_join(
-  track_df,
-  album_df, 
-  by = 'album_name'
-)
-
-# Add column that is true if track is an outlier on track length
-
-track_df$outlier_track_length <- if_else(
-  condition = track_df$track_name %in% 
-    outliers_df[outliers_df$variable == 'track_length_ms',]$track_name,
-  true = TRUE,
-  false = FALSE
-)
 
 # Make violen and dot plot
 
-track_df %>%
+viz_df %>%
   ggplot(
     aes(
       x = reorder(album_name, release_date), 
@@ -34,30 +10,29 @@ track_df %>%
     )
   ) +
   geom_violin(
-    alpha = .3,
-    aes(color = album_name, fill = album_name)
+    aes(fill = album_name),
+    alpha = 0.1,
+    color = NA
   ) +
   geom_dotplot(
+    aes(fill = album_name),
+    alpha = 0.3,
+    binaxis = 'y',
+    color = NA,
+    dotsize = .8,
+    stackdir = 'center'
+  ) +
+  geom_dotplot(
+    data = function(x) subset(x, outlier_track_length),
+    aes(color = album_name),
     binaxis = 'y',
     dotsize = .8,
     fill = NA,
     stackdir = 'center',
-    aes(color = album_name)
-  ) +
-  geom_dotplot(
-    data = track_df[track_df$outlier_track_length,],
-    binaxis = 'y',
-    #color = 'black',
-    dotsize = .8,
-    #fill = 'black',
-    stackdir = 'center',
-    aes(color = album_name, fill = album_name)
+    stroke = 1
   ) +
   geom_text( 
-    data = track_df[track_df$outlier_track_length & track_df$album_name != 'Red',],
-    family = 'Andale Mono',
-    hjust = 'right',
-    size = 6,
+    data = function(x) subset(x, outlier_track_length & album_name != 'Red'),
     aes(
       label = paste(
         track_name, 
@@ -65,21 +40,24 @@ track_df %>%
         ' '
       )
     ),
+    family = 'Andale Mono',
+    hjust = 'right',
+    size = 6
   ) +
   geom_text( 
-    data = track_df[track_df$outlier_track_length & track_df$album_name == 'Red',],
-    family = 'Andale Mono',
-    hjust = 'left',
-    size = 6,
+    data = function(x) subset(x, outlier_track_length & album_name == 'Red'),
     aes(
       label = paste(
         ' ', 
         track_name, 
         format( as.POSIXct(Sys.Date()) + track_length_ms/1000, '(%M:%S)')
       )
-    )
+    ),
+    family = 'Andale Mono',
+    hjust = 'left',
+    size = 6
   ) +
-  ggtitle('Longest and Shortest Taylor Swift Songs') +
+  ggtitle('Taylor Swift Song Length') +
   xlab('Album') +
   ylab('Song Length') +
   scale_y_time(labels = function(l) strftime(l, '%M:%S')) +
@@ -95,7 +73,7 @@ track_df %>%
   )
 
 ggsave(
-  'tswift/reports/figures/outliers_track_length.jpeg', 
+  '~/tswift/reports/figures/outliers_track_length.jpeg', 
   device = 'jpeg',
   width = 18,
   height = 12,
